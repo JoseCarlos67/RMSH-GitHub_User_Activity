@@ -1,5 +1,7 @@
 package services;
 
+import com.sun.source.tree.BreakTree;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,10 +20,11 @@ public class SendHttpRequest {
     try {
       HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
       System.out.println("HTTP status code: " + response.statusCode());
-      System.out.println("\n" + response.body());
-      System.out.println(response.version());
-
-      return response.body();
+      if (response.statusCode() == 200) {
+        return response.body();
+      }
+      System.out.println("ERROr -> " + response.statusCode());
+      return null;
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
