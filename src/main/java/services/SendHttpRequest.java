@@ -7,10 +7,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class SendHttpRequest {
-  public void sendRequest(String userName) {
+  public String sendRequest(String userName) {
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("https://api.github.com/users/" + userName + "/events"))
+            .header("Accept", "application/json")
             .GET()
             .build();
 
@@ -19,9 +20,10 @@ public class SendHttpRequest {
       System.out.println("HTTP status code: " + response.statusCode());
       System.out.println("\n" + response.body());
       System.out.println(response.version());
+
+      return response.body();
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
-    System.out.println(request);
   }
 }
